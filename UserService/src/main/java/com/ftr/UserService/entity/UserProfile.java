@@ -1,5 +1,4 @@
 package com.ftr.UserService.entity;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +14,8 @@ import org.springframework.boot.autoconfigure.web.WebProperties;
 public class UserProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int userId;
 
     @Column(name = "FIRST_NAME")
@@ -49,4 +48,11 @@ public class UserProfile {
     @Column(name = "PERSONAL_IDENTIFICATION_NUMBER")
     private Long personalIdentificationNumber;
 
+    @Column(name = "STATUS")
+    private String status;
+
+    @PrePersist
+    public void prePersist() {
+        this.status = "Active";
+    }
 }

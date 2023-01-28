@@ -1,10 +1,16 @@
 package com.ftr.UserService.model;
 
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class UserProfileRequest {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserProfileResponse {
+    private int userId;
     private String firstName;
     private String lastName;
     private String emailId;
