@@ -4,6 +4,7 @@ import com.ftr.UserService.entity.UserProfile;
 import com.ftr.UserService.exception.UserProfileException;
 import com.ftr.UserService.model.UserProfileRequest;
 import com.ftr.UserService.model.UserProfileResponse;
+import com.ftr.UserService.model.UserProfileUpdateRequest;
 import com.ftr.UserService.repository.UserProfileRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -21,7 +22,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfileResponse createUser(UserProfileRequest userProfileRequest) throws UserProfileException {
-        // log.info("Creating User...");
+        log.info("Creating User...");
 
         Optional<UserProfile> optionalUserProfile = Optional.ofNullable(userProfileRepository.
                 findByPersonalIdentificationNumber(
@@ -50,7 +51,7 @@ public class UserProfileServiceImpl implements UserProfileService {
                 .build();
 
         userProfileRepository.save(userProfile);
-        // log.info("User Created...");
+        log.info("User Created...");
 
         UserProfileResponse userProfileResponse = new UserProfileResponse();
         BeanUtils.copyProperties(userProfile, userProfileResponse);
@@ -70,7 +71,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public String updateUser(int userId, UserProfileRequest userProfileRequest) throws UserProfileException {
+    public String updateUser(int userId, UserProfileUpdateRequest userProfileUpdateRequest) throws UserProfileException {
         // log.info("Updating the userProfile for userId: {} ...", userId);
 
         UserProfile userProfile = userProfileRepository.findById(userId)
@@ -80,44 +81,44 @@ public class UserProfileServiceImpl implements UserProfileService {
         String response = "";
 
         try {
-            if (userProfileRequest.getFirstName() != null) {
-                userProfile.setFirstName(userProfileRequest.getFirstName());
+            if (userProfileUpdateRequest.getFirstName() != null) {
+                userProfile.setFirstName(userProfileUpdateRequest.getFirstName());
                 response += "FirstName, ";
             }
-            if (userProfileRequest.getLastName() != null) {
-                userProfile.setLastName(userProfileRequest.getLastName());
+            if (userProfileUpdateRequest.getLastName() != null) {
+                userProfile.setLastName(userProfileUpdateRequest.getLastName());
                 response += "LastName, ";
             }
-            if (userProfileRequest.getEmailId() != null) {
-                userProfile.setEmailId(userProfileRequest.getEmailId());
+            if (userProfileUpdateRequest.getEmailId() != null) {
+                userProfile.setEmailId(userProfileUpdateRequest.getEmailId());
                 response += "EmailId, ";
             }
-            if (userProfileRequest.getMobileNumber() != null) {
-                userProfile.setMobileNumber(userProfileRequest.getMobileNumber());
+            if (userProfileUpdateRequest.getMobileNumber() != null) {
+                userProfile.setMobileNumber(userProfileUpdateRequest.getMobileNumber());
                 response += "MobileNumber, ";
             }
-            if (userProfileRequest.getPassword() != null && userProfileRequest.getPassword() == userProfile.getPassword()) {
-                userProfile.setPassword(userProfileRequest.getPassword());
+            if (userProfileUpdateRequest.getPassword() != null && userProfileUpdateRequest.getPassword() == userProfile.getPassword()) {
+                userProfile.setPassword(userProfileUpdateRequest.getPassword());
                 response += "Password, ";
             }
-            if (userProfileRequest.getNationality() != null) {
-                userProfile.setNationality(userProfileRequest.getNationality());
+            if (userProfileUpdateRequest.getNationality() != null) {
+                userProfile.setNationality(userProfileUpdateRequest.getNationality());
                 response += "Nationality, ";
             }
-            if (userProfileRequest.getPassportNumber() != null) {
-                userProfile.setPassword(userProfileRequest.getPassportNumber());
+            if (userProfileUpdateRequest.getPassportNumber() != null) {
+                userProfile.setPassword(userProfileUpdateRequest.getPassportNumber());
                 response += "PassportNumber, ";
             }
-            if (userProfileRequest.getPermanentAddress() != null) {
-                userProfile.setPermanentAddress(userProfileRequest.getPermanentAddress());
+            if (userProfileUpdateRequest.getPermanentAddress() != null) {
+                userProfile.setPermanentAddress(userProfileUpdateRequest.getPermanentAddress());
                 response += "PermanentAddress, ";
             }
-            if (userProfileRequest.getOfficeAddress() != null) {
-                userProfile.setOfficeAddress(userProfileRequest.getOfficeAddress());
+            if (userProfileUpdateRequest.getOfficeAddress() != null) {
+                userProfile.setOfficeAddress(userProfileUpdateRequest.getOfficeAddress());
                 response += "OfficeAddress, ";
             }
-            if (userProfileRequest.getPersonalIdentificationNumber() != null) {
-                userProfile.setPersonalIdentificationNumber(userProfileRequest.getPersonalIdentificationNumber());
+            if (userProfileUpdateRequest.getPersonalIdentificationNumber() != null) {
+                userProfile.setPersonalIdentificationNumber(userProfileUpdateRequest.getPersonalIdentificationNumber());
                 response += "PersonalIdentificationNumber, ";
             }
         }
