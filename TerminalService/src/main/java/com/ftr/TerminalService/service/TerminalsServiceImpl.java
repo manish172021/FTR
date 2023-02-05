@@ -131,6 +131,7 @@ public class TerminalsServiceImpl implements TerminalsService {
     public TerminalResponse fetchTerminalByTerminalId(String terminalId) throws TerminalsException {
         log.info("fetching terminal by id...");
         Terminal terminal = terminalsRepository.findById(terminalId)
+                .filter(deletedTerminal-> !deletedTerminal.getDeleted_status().equals("DELETED"))
                 .orElseThrow(() -> new TerminalsException("terminal.notFound"));
 
         TerminalResponse terminalResponse = new TerminalResponse();
