@@ -68,4 +68,11 @@ public class VehiclesController {
         String successMessage = environment.getProperty("vehicle.found.success");
         return new ResponseEntity<>(vehicleResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/harbor/{harborLocatin}")
+    public ResponseEntity<List<VehicleResponse>> fetchVehicleByHarbor(@PathVariable("harborLocation") String harborLocation) throws VehicleException {
+        List<VehicleResponse> vehicleResponses = vehiclesService.fetchVehicleByHarbor(harborLocation);
+        String successMessage = environment.getProperty("vehicles.fetch.success");
+        return new ResponseEntity<>(vehicleResponses, HttpStatus.OK);
+    }
 }

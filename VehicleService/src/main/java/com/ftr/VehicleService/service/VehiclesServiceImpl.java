@@ -12,7 +12,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -99,7 +101,7 @@ public class VehiclesServiceImpl implements VehiclesService {
         log.info("fetching vehicles by name...");
         List<Vehicle> vehicles = vehiclesRepository.findByVehicleName(vehicleName)
                 .stream()
-                .filter(terminal -> !terminal.getDeleted_status().equals("DELETED"))
+                .filter(vehicle -> !vehicle.getDeleted_status().equals("DELETED"))
                 .collect(Collectors.toList());
         if (vehicles.isEmpty()) {
             throw new VehicleException("vehicle.nameType.notFound");
@@ -143,5 +145,26 @@ public class VehiclesServiceImpl implements VehiclesService {
         log.info("fetched vechile by number fetched...");
         return vehicleResponse;
 
+    }
+
+    @Override
+    public List<VehicleResponse> fetchVehicleByHarbor(String harborLocation) throws VehicleException {
+
+        log.info("fetching vechile by number harborLocation...");
+        List<Vehicle> vehicles = vehiclesRepository.findByHarborLocation(harborLocation)
+                .stream().collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(vehicles)) {
+            throw new VehicleException("vehicle.byHarbour.notFound");
+        }
+        List<VehicleResponse> vehiclesResponse = vehicles
+                .stream()
+                .map(vehicle -> {
+                    VehicleResponse vehicleResponse = new VehicleResponse();
+                    BeanUtils.copyProperties(vehicle, vehicleResponse);
+                    return vehicleResponse;
+                })
+                .collect(Collectors.toList());
+        log.info("fetched vechile by number harborLocation...");
+        return vehiclesResponse;
     }
 }

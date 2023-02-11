@@ -21,4 +21,6 @@ public interface VehiclesService {
     String removeVehicle(String vehicleNumber) throws VehicleException;
 
     VehicleResponse fetchVehicleDetailsByVehicleNumber(String vehicleNumber) throws VehicleException;
+
+    List<VehicleResponse> fetchVehicleByHarbor(String harborLocation) throws VehicleException;
 }
