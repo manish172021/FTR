@@ -1,5 +1,6 @@
 package com.ftr.UserService.controller;
 import com.ftr.UserService.exception.UserProfileException;
+import com.ftr.UserService.model.LoginRequest;
 import com.ftr.UserService.model.UserProfileRequest;
 import com.ftr.UserService.model.UserProfileResponse;
 import com.ftr.UserService.model.UserProfileUpdateRequest;
@@ -16,11 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/ftr/userProfile")
 @Validated
 public class UserProfileController {
-
-    /* TODO
-        login( LoginDTO logindto) POST	ResponseEntity<String>
-        This method is used for logging in using userId and password
-    */
 
     @Autowired
     private UserProfileService userProfileService;
@@ -55,12 +51,12 @@ public class UserProfileController {
         String successMessage = environment.getProperty("user.delete.success") + deletedUserId;
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
-/* TODO
-    @PostMapping
-    public ResponseEntity<String> login(@RequestBody LoginDTO logindto) {
-        String updateMessage = userProfileService.login(logindto);
-        return new ResponseEntity<>(updateMessage, HttpStatus.OK);
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) throws UserProfileException {
+        String successUserId = userProfileService.login(loginRequest);
+        String successMessage = environment.getProperty("user.login.success") + successUserId;
+        return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
- */
 
 }

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WorkitemRepository extends JpaRepository<Workitem, String> {
-//     Workitem finByUserId(Long userId);
+     Workitem findByUserId(Long userId);
 }

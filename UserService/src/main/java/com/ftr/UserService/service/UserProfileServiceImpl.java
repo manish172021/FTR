@@ -2,6 +2,7 @@ package com.ftr.UserService.service;
 
 import com.ftr.UserService.entity.UserProfile;
 import com.ftr.UserService.exception.UserProfileException;
+import com.ftr.UserService.model.LoginRequest;
 import com.ftr.UserService.model.UserProfileRequest;
 import com.ftr.UserService.model.UserProfileResponse;
 import com.ftr.UserService.model.UserProfileUpdateRequest;
@@ -155,5 +156,15 @@ public class UserProfileServiceImpl implements UserProfileService {
         // userProfileRepository.delete(userProfile);
         // log.info("Deleted userId: {}...", userId);
         return userId;
+    }
+
+    @Override
+    public String login(LoginRequest loginRequest) throws UserProfileException {
+        UserProfile userProfile = userProfileRepository.findById(loginRequest.getUserId())
+                .orElseThrow(() -> new UserProfileException("user.notFound"));
+        if(!userProfile.getPassword().equals(loginRequest.getPassword())) {
+            throw new UserProfileException("user.login.failure");
+        }
+        return Integer.toString(loginRequest.getUserId());
     }
 }

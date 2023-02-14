@@ -1,11 +1,11 @@
 package com.ftr.WorkitemService.repository;
 
-import com.ftr.WorkitemService.entity.VehicleWorkItem;
+import com.ftr.WorkitemService.entity.VehicleWorkitem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface VehicleWorkitemRepository extends JpaRepository<VehicleWorkItem, String> {
-//    VehicleWorkItem findByWorkitemId(String workitemId);
+public interface VehicleWorkitemRepository extends JpaRepository<VehicleWorkitem, String> {
+    VehicleWorkitem findByWorkitemId(String workitemId);
 }

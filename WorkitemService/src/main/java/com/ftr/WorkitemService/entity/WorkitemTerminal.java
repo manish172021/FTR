@@ -5,10 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
-import java.util.Date;
-
-
 
 
 @Entity
@@ -16,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WorkItemTerminal {
+public class WorkitemTerminal {
 
     @Id
     @Column(name = "WORKITEM_ID")

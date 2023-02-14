@@ -44,8 +44,12 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     // handleUserProfileException : triggers when there is not user with the specified userId
     @ExceptionHandler(UserProfileException.class)
     public ResponseEntity<ErrorResponse> handleUserProfileException(UserProfileException exception) {
+
         HttpStatus errorCode = HttpStatus.NOT_FOUND;
-        if (exception.getMessage().equals("user.alreadyExists")) {
+
+        if(exception.getMessage().equals("user.login.failure")) {
+            errorCode = HttpStatus.UNAUTHORIZED;
+        } else if (exception.getMessage().equals("user.alreadyExists")) {
             errorCode = HttpStatus.CONFLICT;
         } else if (exception.getMessage().equals("user.notFound")) {
             errorCode = HttpStatus.NOT_FOUND;

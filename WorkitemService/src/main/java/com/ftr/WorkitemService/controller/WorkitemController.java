@@ -61,14 +61,12 @@ public class WorkitemController {
         return new ResponseEntity<>(vehicleWorkitemResponse, HttpStatus.OK);
     }
 
-
-    @PostMapping("/managed-user/{workItemId}")
+    @PostMapping("/managed-vehicle/{workItemId}")
     public ResponseEntity<String> allocateVehicle(@PathVariable("workItemId") String workItemId, @RequestBody @Valid VehicleWorkitemRequest vehicleWorkitemRequest) throws WorkitemException {
-        String allocatedVehiclewokId = workitemService.allocateVehicle(workItemId, vehicleWorkitemRequest);
-        String successMessage = environment.getProperty("workitem.vehicle.allocated") + allocatedVehiclewokId;
+        String allocatedVehicleworkId = workitemService.allocateVehicle(workItemId, vehicleWorkitemRequest);
+        String successMessage = environment.getProperty("workitem.vehicle.allocated") + allocatedVehicleworkId;
         return new ResponseEntity<>(successMessage, HttpStatus.CREATED);
     }
-
 
     @GetMapping("/managed-status/{workItemId}")
     public ResponseEntity<String> fetchWorkItemStatus(@PathVariable("workItemId") String workItemId) throws WorkitemException {
@@ -77,14 +75,12 @@ public class WorkitemController {
         return new ResponseEntity<>(workItemStatus, HttpStatus.OK);
     }
 
-
     @PutMapping("/managed-update/{workItemId}")
     public ResponseEntity<String> updateWorkItemStatus(@PathVariable("workItemId") String workItemId) throws WorkitemException {
         String updatedWorkitemId = workitemService.updateWorkItemStatus(workItemId);
         String successMessage = environment.getProperty("workitem.updateWorkItemStatus.success") + updatedWorkitemId;
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
-
 
     @GetMapping("/managed-vehicle/{vehicleNumber}")
     public ResponseEntity<VehicleWorkitemResponse> fetchVehicleDetailsByVehicleNumber(@PathVariable("vehicleNumber") String vehicleNumber) throws WorkitemException {
@@ -99,4 +95,5 @@ public class WorkitemController {
         String successMessage = environment.getProperty("workitem.assignTerminalforWorKitem.success") + updatedMessage;
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
+
 }

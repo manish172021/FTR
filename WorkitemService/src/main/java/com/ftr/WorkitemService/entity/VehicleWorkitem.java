@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VehicleWorkItem {
+public class VehicleWorkitem {
 
     @Id
     @Column(name = "VEHILCE_NUMBER")

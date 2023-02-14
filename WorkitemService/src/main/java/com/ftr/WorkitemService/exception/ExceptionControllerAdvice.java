@@ -20,8 +20,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -40,23 +39,41 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
                 .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // For handling FeignException
+    @ExceptionHandler(CustomFeignException.class)
+    public ResponseEntity<ErrorResponse> handleFeignException(CustomFeignException exception) {
+        return new ResponseEntity<>(new ErrorResponse().builder()
+                .errorMessage(exception.getErrorMessage())
+                .timeStamp(exception.getTimeStamp())
+                .errorCode(exception.getErrorCode())
+                .build(), HttpStatusCode.valueOf(exception.getStatus()));
+    }
+
     // handleTerminalException
     @ExceptionHandler(WorkitemException.class)
     public ResponseEntity<ErrorResponse> handleTerminalException(WorkitemException exception) {
         HttpStatus errorCode = HttpStatus.NOT_FOUND;
-        if (exception.getMessage().equals("vehicles.empty")) {
+
+        Set<String> notFound = new HashSet<>(Arrays.asList(
+                "workitem.notFound",
+                "harbor.notFound",
+                "harbor.notFound",
+                "workitem.noWorkitems",
+                "workitem.user.fail",
+                "workitem.vehicle.fail",
+                "workitem.status.notAssigned",
+                "workitem.noTerminal",
+                "vehicle.workitem.fail",
+                "terminal.notAvailable"
+        ));
+
+        if (notFound.contains(exception.getMessage())) {
             errorCode = HttpStatus.NOT_FOUND;
-        } else if (exception.getMessage().equals("vehicle.notFound")) {
-            errorCode = HttpStatus.NOT_FOUND;
-        } else if (exception.getMessage().equals("vehicle.nameType.notFound")) {
-            errorCode = HttpStatus.NOT_FOUND;
-        } else if (exception.getMessage().equals("vehicle.update.alreadyExists")) {
+        }
+        else if (exception.getMessage().equals("workitem.alreadyVehicle.assign")) {
             errorCode = HttpStatus.CONFLICT;
-        }else if (exception.getMessage().equals("vehicle.alreadyExists")) {
-            errorCode = HttpStatus.CONFLICT;
-        } else if (exception.getMessage().equals("vehicle.already.deleted")) {
-        errorCode = HttpStatus.CONFLICT;
-        } else {
+        }
+        else {
             errorCode = HttpStatus.NOT_FOUND;
         }
 
@@ -142,7 +159,6 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
                 .errorMessage("Missing Parameters:: " + errorMsg)
                 .build(), HttpStatus.BAD_REQUEST);
     }
-
 
     //  handleNoHandlerFoundException : triggers when the handler method is invalid
     @Override

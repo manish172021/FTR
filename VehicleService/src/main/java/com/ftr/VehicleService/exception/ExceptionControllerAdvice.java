@@ -40,6 +40,16 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
                 .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // For handling FeignException
+    @ExceptionHandler(CustomFeignException.class)
+    public ResponseEntity<ErrorResponse> handleFeignException(CustomFeignException exception) {
+        return new ResponseEntity<>(new ErrorResponse().builder()
+                .errorMessage(exception.getErrorMessage())
+                .timeStamp(exception.getTimeStamp())
+                .errorCode(exception.getErrorCode())
+                .build(), HttpStatusCode.valueOf(exception.getStatus()));
+    }
+
     // handleTerminalException
     @ExceptionHandler(VehicleException.class)
     public ResponseEntity<ErrorResponse> handleTerminalException(VehicleException exception) {
@@ -56,6 +66,8 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
             errorCode = HttpStatus.CONFLICT;
         } else if (exception.getMessage().equals("vehicle.already.deleted")) {
         errorCode = HttpStatus.CONFLICT;
+        } else if (exception.getMessage().equals("vehicle.associated.withWorkItem")) {
+            errorCode = HttpStatus.CONFLICT;
         } else {
             errorCode = HttpStatus.NOT_FOUND;
         }

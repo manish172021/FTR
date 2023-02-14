@@ -1,4 +1,4 @@
-package com.ftr.WorkitemService.model;
+package com.ftr.VehicleService.external.client.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -2,6 +2,8 @@ package com.ftr.VehicleService.service;
 
 import com.ftr.VehicleService.entity.Vehicle;
 import com.ftr.VehicleService.exception.VehicleException;
+import com.ftr.VehicleService.external.client.WorkitemService;
+import com.ftr.VehicleService.external.client.response.VehicleWorkitemResponse;
 import com.ftr.VehicleService.model.UpdateVehicleStatusRequest;
 import com.ftr.VehicleService.model.VehicleRequest;
 import com.ftr.VehicleService.model.VehicleResponse;
@@ -29,6 +31,8 @@ public class VehiclesServiceImpl implements VehiclesService {
     @Autowired
     private Environment environment;
 
+    @Autowired
+    private WorkitemService workitemService;
 
     @Override
     public VehicleResponse insertNewVehicle(VehicleRequest vehicleRequest) throws VehicleException {
@@ -86,11 +90,11 @@ public class VehiclesServiceImpl implements VehiclesService {
                 .filter(deleteVehicle -> !deleteVehicle.getDeleted_status().equals("DELETED"))
                 .orElseThrow(() -> new ValidationException("vehicle.notFound"));
 
-        if (updateVehicleStatusRequest.getVehicleStatus().equals(vehicle.getVehicleStatus())) {
-            throw new VehicleException("vehicle.update.alreadyExists");
-        } else {
+//        if (updateVehicleStatusRequest.getVehicleStatus().equals(vehicle.getVehicleStatus())) {
+//            throw new VehicleException("vehicle.update.alreadyExists");
+//        } else {
             vehicle.setVehicleStatus(updateVehicleStatusRequest.getVehicleStatus());
-        }
+//        }
         vehiclesRepository.saveAndFlush(vehicle);
         log.info("vehicle status updated...");
         return vehicleNumber;
@@ -124,13 +128,22 @@ public class VehiclesServiceImpl implements VehiclesService {
         log.info("removing vehicle...");
         Vehicle vehicle = vehiclesRepository.findById(vehicleNumber)
                 .orElseThrow(() -> new ValidationException("vehicle.notFound"));
-        if(vehicle.getDeleted_status().equals("DELETED")) {
-            throw new VehicleException("vehicle.already.deleted");
+
+        try {
+            VehicleWorkitemResponse vehicleWorkitemResponse = workitemService.fetchVehicleDetailsByVehicleNumber(vehicleNumber).getBody();
         }
-        vehicle.setDeleted_status("DELETED");
-        vehiclesRepository.saveAndFlush(vehicle);
-        log.info("removed vehicle...");
-        return vehicleNumber;
+        catch (Exception e) {
+            if(vehicle.getDeleted_status().equals("DELETED")) {
+                throw new VehicleException("vehicle.already.deleted");
+            }
+            vehicle.setDeleted_status("DELETED");
+            vehiclesRepository.saveAndFlush(vehicle);
+            log.info("removed vehicle...");
+            return vehicleNumber;
+        }
+
+        throw new VehicleException("vehicle.associated.withWorkItem");
+
     }
 
     @Override
