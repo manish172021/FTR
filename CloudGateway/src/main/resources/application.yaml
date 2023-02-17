@@ -1,0 +1,28 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: API-GATEWAY
+  config:
+    import: configserver:http://localhost:9296
+
+  cloud:
+    gateway:
+      routes:
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/ftr/userProfile/**
+        - id: TERMINAL-SERVICE
+          uri: lb://TERMINAL-SERVICE
+          predicates:
+            - Path=/ftr/terminals/**
+        - id: VEHICLE-SERVICE
+          uri: lb://VEHICLE-SERVICE
+          predicates:
+            - Path=/ftr/vehicles/**
+        - id: WORKITEM-SERVICE
+          uri: lb://WORKITEM-SERVICE
+          predicates:
+            - Path=/ftr/workItems/**
