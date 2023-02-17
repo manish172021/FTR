@@ -14,15 +14,35 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/ftr/userProfile/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: USER-SERVICE
+                fallbackuri: forward:/userServiceFallBack
         - id: TERMINAL-SERVICE
           uri: lb://TERMINAL-SERVICE
           predicates:
             - Path=/ftr/terminals/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: TERMINAL-SERVICE
+                fallbackuri: forward:/terminalServiceFallBack
         - id: VEHICLE-SERVICE
           uri: lb://VEHICLE-SERVICE
           predicates:
             - Path=/ftr/vehicles/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: VEHICLE-SERVICE
+                fallbackuri: forward:/vehicleServiceFallBack
         - id: WORKITEM-SERVICE
           uri: lb://WORKITEM-SERVICE
           predicates:
             - Path=/ftr/workItems/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: WORKITEM-SERVICE
+                fallbackuri: forward:/workitemServiceFallBack
