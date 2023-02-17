@@ -19,6 +19,10 @@ spring:
               args:
                 name: USER-SERVICE
                 fallbackuri: forward:/userServiceFallBack
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
         - id: TERMINAL-SERVICE
           uri: lb://TERMINAL-SERVICE
           predicates:
@@ -28,6 +32,10 @@ spring:
               args:
                 name: TERMINAL-SERVICE
                 fallbackuri: forward:/terminalServiceFallBack
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
         - id: VEHICLE-SERVICE
           uri: lb://VEHICLE-SERVICE
           predicates:
@@ -37,6 +45,10 @@ spring:
               args:
                 name: VEHICLE-SERVICE
                 fallbackuri: forward:/vehicleServiceFallBack
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
         - id: WORKITEM-SERVICE
           uri: lb://WORKITEM-SERVICE
           predicates:
@@ -46,3 +58,7 @@ spring:
               args:
                 name: WORKITEM-SERVICE
                 fallbackuri: forward:/workitemServiceFallBack
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
