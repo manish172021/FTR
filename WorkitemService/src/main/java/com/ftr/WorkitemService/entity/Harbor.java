@@ -16,10 +16,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Harbor {
 
-    @Id
     @Column(name = "COUNTRY")
     private String country;
 
+    @Id
     @Column(name = "AVAILABLE_HARBOR_LOCATIONS")
     private String availableHarborLocations;
 

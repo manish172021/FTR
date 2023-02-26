@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface HarborRepository extends JpaRepository<Harbor, String> {
-    public List<Harbor> findByCountry(String country);
+    List<Harbor> findByCountry(String country);
 }

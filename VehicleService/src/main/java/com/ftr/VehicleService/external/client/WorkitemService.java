@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 
-@CircuitBreaker(name = "external", fallbackMethod = "fallback")
+//@CircuitBreaker(name = "external", fallbackMethod = "fallback")
 @FeignClient(name = "WORKITEM-SERVICE/ftr/workItems")
 public interface WorkitemService {
 
@@ -21,7 +21,7 @@ public interface WorkitemService {
     default ResponseEntity<Long> fallback(Exception e) {
         LocalDateTime timeStamp = LocalDateTime.now();
         String errorCode = String.valueOf(HttpStatus.SERVICE_UNAVAILABLE);
-        String errorMessage = "Terminal Service is not available!";
+        String errorMessage = "Workitem Service is not available!";
         int status = HttpStatus.SERVICE_UNAVAILABLE.value();
         throw new CustomFeignException(timeStamp, errorCode, errorMessage, status);
     }

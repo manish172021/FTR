@@ -1,3 +1,23 @@
+spring:
+  config:
+    import: configserver:http://localhost:9296
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-31838004.okta.com/oauth2/default
+      client:
+        registration:
+          internal-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            scope: internal
+            client-id: 0oa8h2z3ekR8nZoFA5d7
+            client-secret: a-oJ4HK_7wlxP5lJ-qoTa5zSUKqFCV6OMmSKLSgl
+        provider:
+          okta:
+            issuer-uri: https://dev-31838004.okta.com/oauth2/default
+
 resilience4j:
   circuitbreaker:
     instances:

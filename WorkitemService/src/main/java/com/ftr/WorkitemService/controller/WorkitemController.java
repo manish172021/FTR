@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class WorkitemController {
     @Autowired
     private Environment environment;
 
+    @PreAuthorize("hasAuthority('ROLE_Customer')")
     @PostMapping
     public ResponseEntity<WorkitemResponse> createWorkItem(@RequestBody @Valid WorkitemRequest workitemRequest) throws WorkitemException {
         WorkitemResponse workitemResponse = workitemService.createWorkitem(workitemRequest);
@@ -33,6 +35,7 @@ public class WorkitemController {
         return new ResponseEntity<>(workitemResponse, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Customer')")
     @GetMapping("/{fromCountry}")
     public ResponseEntity<List<String>> fetchAvailableHarborLocations(@PathVariable("fromCountry") String fromCountry) throws WorkitemException {
         List<String> availableHarborLocations = workitemService.fetchAvailableHarborLocations(fromCountry);
@@ -40,6 +43,7 @@ public class WorkitemController {
         return new ResponseEntity<>(availableHarborLocations, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Customer')")
     @PutMapping("/{workItemId}")
     public ResponseEntity<String> updateWorkItem(@PathVariable("workItemId") String workItemId, @RequestBody @Valid UpdateWorkitemRequest updateWorkitemRequest) throws WorkitemException {
         String updatedMessage = workitemService.updateWorkItem(workItemId, updateWorkitemRequest);
@@ -47,6 +51,7 @@ public class WorkitemController {
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Admin')")
     @GetMapping
     public ResponseEntity<List<WorkitemResponse>> fetchWorkItemDetails() throws WorkitemException {
         List<WorkitemResponse> workitemResponses = workitemService.fetchWorkItemDetails();
@@ -54,6 +59,7 @@ public class WorkitemController {
         return new ResponseEntity<>(workitemResponses, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Customer')")
     @GetMapping("/managed-user/{userId}")
     public ResponseEntity<VehicleWorkitemResponse> trackWorkItemByUser(@PathVariable("userId") Integer userId) throws WorkitemException {
         VehicleWorkitemResponse vehicleWorkitemResponse = workitemService.trackWorkItemByUser(userId);
@@ -61,6 +67,7 @@ public class WorkitemController {
         return new ResponseEntity<>(vehicleWorkitemResponse, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Admin')")
     @PostMapping("/managed-vehicle/{workItemId}")
     public ResponseEntity<String> allocateVehicle(@PathVariable("workItemId") String workItemId, @RequestBody @Valid VehicleWorkitemRequest vehicleWorkitemRequest) throws WorkitemException {
         String allocatedVehicleworkId = workitemService.allocateVehicle(workItemId, vehicleWorkitemRequest);
@@ -68,6 +75,7 @@ public class WorkitemController {
         return new ResponseEntity<>(successMessage, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Admin')")
     @GetMapping("/managed-status/{workItemId}")
     public ResponseEntity<String> fetchWorkItemStatus(@PathVariable("workItemId") String workItemId) throws WorkitemException {
         String workItemStatus = workitemService.fetchWorkItemStatus(workItemId);
@@ -75,6 +83,7 @@ public class WorkitemController {
         return new ResponseEntity<>(workItemStatus, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Admin')")
     @PutMapping("/managed-update/{workItemId}")
     public ResponseEntity<String> updateWorkItemStatus(@PathVariable("workItemId") String workItemId) throws WorkitemException {
         String updatedWorkitemId = workitemService.updateWorkItemStatus(workItemId);
@@ -82,6 +91,7 @@ public class WorkitemController {
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Admin') || hasAuthority('internal')")
     @GetMapping("/managed-vehicle/{vehicleNumber}")
     public ResponseEntity<VehicleWorkitemResponse> fetchVehicleDetailsByVehicleNumber(@PathVariable("vehicleNumber") String vehicleNumber) throws WorkitemException {
         VehicleWorkitemResponse vehicleWorkitemResponse = workitemService.fetchVehicleDetailsByVehicleNumber(vehicleNumber);
@@ -89,6 +99,7 @@ public class WorkitemController {
         return new ResponseEntity<>(vehicleWorkitemResponse, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Admin')")
     @PostMapping("/managed-terminal/{workItemId}")
     public ResponseEntity<String> assignTerminalforWorKitem(@PathVariable("workItemId") String workItemId) throws WorkitemException {
         String updatedMessage = workitemService.assignTerminalforWorKitem(workItemId);

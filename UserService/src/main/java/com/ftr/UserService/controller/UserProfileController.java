@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class UserProfileController {
         return new ResponseEntity<>(userProfileResponse, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Customer')")
     @GetMapping("/{userId}")
     public ResponseEntity<UserProfileResponse> getUser(@PathVariable("userId") int userId) throws UserProfileException {
         UserProfileResponse userProfileResponse = userProfileService.getUser(userId);
@@ -38,6 +40,7 @@ public class UserProfileController {
         return new ResponseEntity<>(userProfileResponse, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Customer')")
     @PutMapping("/{userId}")
     public ResponseEntity<String> updateUser(@PathVariable("userId") int userId, @Valid @RequestBody UserProfileUpdateRequest userProfileUpdateRequest) throws UserProfileException {
         String updatedMessage = userProfileService.updateUser(userId, userProfileUpdateRequest);
@@ -45,6 +48,7 @@ public class UserProfileController {
         return new ResponseEntity<>(updatedMessage, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_Admin')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") int userId) throws UserProfileException {
         Integer deletedUserId = userProfileService.deleteUser(userId);
